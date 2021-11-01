@@ -3,14 +3,9 @@
 
 $conexion = new mysqli("localhost", "root", "", "sistema") or die("not conected" . mysqli_connect_error());
 
-if (!$conexion) {
-  echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-  echo mysqli_error($conexion);
-}
+//echo "Conexion exitosa";
 
-echo "Conexion exitosa";
-
-if (isset($_GET['nombre']) && isset($_GET['apellidos']) && isset($_GET['email']) && $conexion) {
+if (isset($_GET['nombre']) && isset($_GET['apellidos']) && isset($_GET['email']) && isset($_GET['telefono'])) {
 
   $nombre = $_GET['nombre'];
   $apellidos = $_GET['apellidos'];
@@ -22,11 +17,13 @@ if (isset($_GET['nombre']) && isset($_GET['apellidos']) && isset($_GET['email'])
 
   $query = mysqli_query($conexion, $sql);
 
-  if ($query) {
+  
+
+ /* if ($query) {
     echo "Datos guardados";
   } else {
     echo "Error al guardar los datos";
-  }
+  }*/
 }
 
 ?>

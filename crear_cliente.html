@@ -375,43 +375,61 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Gestion de Clientes</h1>
+          <h1 class="h3 mb-2 text-gray-800">Alta de Cliente</h1>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-body">
-              <a href="#" class="btn btn-primary btn-icon-split float-right">
+
+
+
+              <form role="form" id="formularioCliente">
+
+                <div class="row">
+                  <div class="col-xs-3 col-md-3">
+                    <label for="nombre"><span>Nombre:</span>
+                      <input type="text" class="form-control" id="txtNombre" placeholder="Nombre" required />
+                  </div>
+                  <div class="col-xs-3 col-md-3">
+                    <label for="apellido"><span>Apellido:</span>
+                      <input type="text" class="form-control" id="txtApellido" placeholder="Ingrese un apellido"
+                        required />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-3 col-md-3">
+                    <label for="telefono"><span>Teléfono:</span>
+                      <input type="text" class="form-control" id="txtTelefono" placeholder="Ingrese un teléfono"
+                        required />
+                  </div>
+                  <div class="col-xs-3 col-md-3">
+                    <label for="email"><span>Email:</span>
+                      <input type="text" class="form-control" id="txtEmail" placeholder="Ingrese un email" required />
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label for="comment">Detalle:</label>
+                    <textarea class="form-control" rows="5" id="txtDetalle"></textarea>
+                  </div>
+                </div>
+              </form>
+
+
+
+
+
+              <a href="#" class="btn btn-primary btn-icon-split float-right" id="btnAgregarCliente">
                 <span class="icon text-white-50">
                   <i class="fas fa-flag"></i>
                 </span>
-                <span class="text">Agregar Cliente</span>
+                <span class="text">Crear Cliente</span>
               </a>
               <br>
               </br>
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre Completo</th>
-                      <th>Apellidos</th>
-                      <th>Email</th>
-                      <th>Teléfono</th>
-                      <th>Detalle</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- <tr>
-                        <td>1</td>
-                        <td>Richard Johel</td>
-                        <td>Campos Barrionuevo</td>
-                        <td>richardsjcb@gmail.com</td>
-                        <td>1161564480</td>
-                        <td>First</td>
-                      </tr> -->
-                  </tbody>
-                </table>
-              </div>
             </div>
           </div>
         </div>
@@ -481,66 +499,39 @@
 
   <script>
     $(document).ready(function () {
-      consultarClientes();
-      // agregarClienteATable('1', "RichardS", "Campos", "richardsjcb@gmail.com" ,"1161564480", "first");
+      $('#btnAgregarCliente').click(crearClientes);
     });
 
-    /**  function consultarClientes() {
-      fetch("http://localhost/SistemaPHP/api/consultar.php", {
+    async function crearClientes() {
+
+      let nombre = $('#txtNombre').val();
+      let apellido = $('#txtApellido').val();
+      let email = $('#txtEmail').val();
+      let telefono = $('#txtTelefono').val();
+      let detalle = $('#txtDetalle').val();
+
+      fetch(`http://localhost/SistemaPHP/api/agregar.php?nombre=${nombre}&apellidos=${apellido}&email=${email}&telefono=${telefono}&detalle=${detalle}`, {
         method: "GET",
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
           "Content-Type": "application/json",
         },
-      })
-        .then((respuesta) => respuesta.json())
-        .then((clientes) => {
-          console.log(clientes);
-        });
-    }*/
-
-    function consultarClientes() {
-      fetch("http://localhost/SistemaPHP/api/consultar.php", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          agregarVariosClientesATable(data);
-        });
+      }).then(function (data) {
+        console.log(data);
+        if (data.ok) {
+          alert("Cliente creado correctamente");
+          $('#txtNombre').val("");
+          $('#txtApellido').val("");
+          $('#txtEmail').val("");
+          $('#txtTelefono').val("");
+          $('#txtDetalle').val("");
+          //location.reload();
+        } else {
+          alert("Error al crear el cliente");
+        }
+      });
     }
 
-    function agregarVariosClientesATable(data) {
-      for (let i = 0; i < data.length; i++) {
-        agregarClienteATable(
-          data[i].id,
-          data[i].nombre,
-          data[i].apellidos,
-          data[i].email,
-          data[i].telefono,
-          data[i].detalle
-        );
-      }
-    }
-
-    function agregarClienteATable(id, nombre, apellidos, email, telefono, detalle) {
-      $("#dataTable tbody").append(
-        `<tr>
-            <td>${id}</td>
-            <td>${nombre}</td>
-            <td>${apellidos}</td>
-            <td>${email}</td>
-            <td>${telefono}</td>
-            <td>${detalle}</td>
-          </tr>`
-      );
-    }
   </script>
 </body>
 
